@@ -3,11 +3,12 @@ package transport
 import (
 	"fmt"
 
+	"github.com/gin-gonic/gin"
 	"github.com/yaroslavyarosh/stackpad-backend/internal/service"
 )
 
 type NotebookTransport interface {
-	Test()
+	Test(ctx *gin.Context)
 }
 
 type notebookTransport struct {
@@ -20,7 +21,7 @@ func newNotebookTransport(service service.NotebookService) *notebookTransport {
 	}
 }
 
-func (s *notebookTransport) Test() {
+func (s *notebookTransport) Test(ctx *gin.Context) {
 	fmt.Println("Test() from notebook transport")
 	s.service.Test()
 }

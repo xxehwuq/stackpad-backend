@@ -1,6 +1,10 @@
 package transport
 
 import (
+	"fmt"
+
+	"github.com/gin-gonic/gin"
+	"github.com/yaroslavyarosh/stackpad-backend/config"
 	"github.com/yaroslavyarosh/stackpad-backend/internal/service"
 )
 
@@ -14,6 +18,19 @@ func New(service *service.Service) *Transport {
 	}
 }
 
-func (t *Transport) Init() {
+func (t *Transport) Init(cfg *config.Config) {
+	router := gin.Default()
+	t.initApi(router)
 
+	router.Run(fmt.Sprintf(":%s", cfg.Http.Port))
+}
+
+func (t *Transport) initApi(router *gin.Engine) {
+	api := router.Group("/api")
+	{
+		notebooks := api.Group("/notebooks")
+		{
+			notebooks.GET("", t.Notebook.Test)
+		}
+	}
 }
