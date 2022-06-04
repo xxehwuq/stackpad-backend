@@ -12,5 +12,5 @@ func Run(cfg *config.Config) {
 	service := service.New(storage)
 	transport := transport.New(service)
 
-	transport.Notebook.Test()
+	transport.Init()
 }

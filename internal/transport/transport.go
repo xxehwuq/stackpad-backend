@@ -13,3 +13,7 @@ func New(service *service.Service) *Transport {
 		Notebook: newNotebookTransport(service.Notebook),
 	}
 }
+
+func (t *Transport) Init() {
+
+}
