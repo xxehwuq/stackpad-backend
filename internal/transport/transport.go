@@ -28,7 +28,7 @@ func (t *Transport) Init(cfg *config.Config) {
 func (t *Transport) initApi(router *gin.Engine) {
 	api := router.Group("/api")
 	{
-		notebooks := api.Group("/notebooks")
+		notebooks := api.Group("/notebook")
 		{
 			notebooks.GET("", t.Notebook.Test)
 		}

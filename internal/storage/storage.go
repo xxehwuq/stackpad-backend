@@ -1,11 +1,13 @@
 package storage
 
+import "gorm.io/gorm"
+
 type Storage struct {
 	Notebook NotebookStorage
 }
 
-func New() *Storage {
+func New(db *gorm.DB) *Storage {
 	return &Storage{
-		Notebook: newNotebookStorage(),
+		Notebook: newNotebookStorage(db),
 	}
 }
