@@ -25,9 +25,10 @@ func newUserService(storage storage.UserStorage, passwordManager hash.PasswordMa
 
 func (s *userService) SignUp(user entity.User) (string, error) {
 	id, _ := gonanoid.New()
+	hashedPassword := s.passwordManager.Hash(user.Password)
 
 	user.Id = id
-	user.Password = s.passwordManager.Hash(user.Password)
+	user.Password = hashedPassword
 
 	err := s.storage.Add(user)
 	if err != nil {
