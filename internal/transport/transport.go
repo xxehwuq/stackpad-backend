@@ -1,21 +1,22 @@
 package transport
 
 import (
-	"fmt"
-
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/yaroslavyarosh/stackpad-backend/config"
+	"github.com/yaroslavyarosh/stackpad-backend/internal/entity"
 	"github.com/yaroslavyarosh/stackpad-backend/internal/service"
 )
 
 type Transport struct {
-	User UserTransport
+	service *service.Service
+	pkg     entity.Pkg
 }
 
-func New(service *service.Service) *Transport {
+func New(service *service.Service, pkg entity.Pkg) *Transport {
 	return &Transport{
-		User: newUserTransport(service.User),
+		service: service,
+		pkg:     pkg,
 	}
 }
 
@@ -29,17 +30,19 @@ func (t *Transport) Init(cfg *config.Config) {
 
 	t.initApi(router)
 
-	router.Run(fmt.Sprintf(":%s", cfg.Http.Port))
+	router.Run(":" + cfg.Http.Port)
 }
 
 func (t *Transport) initApi(router *gin.Engine) {
 	api := router.Group("/api")
 	{
+		// authApi := api.Group("", t.setUserId)
+
 		user := api.Group("/user")
 		{
-			user.POST("/sign-up", t.User.SignUp)
-			user.POST("/sign-in", t.User.SignIn)
-			user.POST("/confirm/:userId", t.User.Confirm)
+			user.POST("/sign-up", t.userSignUp)
+			user.POST("/sign-in", t.userSignIn)
+			user.POST("/confirm/:userId", t.userConfirm)
 		}
 	}
 }

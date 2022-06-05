@@ -5,26 +5,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/yaroslavyarosh/stackpad-backend/internal/entity"
-	"github.com/yaroslavyarosh/stackpad-backend/internal/service"
 )
 
-type UserTransport interface {
-	SignUp(ctx *gin.Context)
-	SignIn(ctx *gin.Context)
-	Confirm(ctx *gin.Context)
-}
-
-type userTransport struct {
-	service service.UserService
-}
-
-func newUserTransport(service service.UserService) *userTransport {
-	return &userTransport{
-		service: service,
-	}
-}
-
-func (s *userTransport) SignUp(ctx *gin.Context) {
+func (t *Transport) userSignUp(ctx *gin.Context) {
 	var user entity.User
 
 	if err := ctx.BindJSON(&user); err != nil {
@@ -32,7 +15,7 @@ func (s *userTransport) SignUp(ctx *gin.Context) {
 		return
 	}
 
-	token, err := s.service.SignUp(user)
+	token, err := t.service.User.SignUp(user)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
 		return
@@ -43,7 +26,7 @@ func (s *userTransport) SignUp(ctx *gin.Context) {
 	})
 }
 
-func (s *userTransport) SignIn(ctx *gin.Context) {
+func (t *Transport) userSignIn(ctx *gin.Context) {
 	var user entity.User
 
 	if err := ctx.BindJSON(&user); err != nil {
@@ -51,7 +34,7 @@ func (s *userTransport) SignIn(ctx *gin.Context) {
 		return
 	}
 
-	token, err := s.service.SignIn(user.Email, user.Password)
+	token, err := t.service.User.SignIn(user.Email, user.Password)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
 		return
@@ -62,10 +45,10 @@ func (s *userTransport) SignIn(ctx *gin.Context) {
 	})
 }
 
-func (s *userTransport) Confirm(ctx *gin.Context) {
+func (t *Transport) userConfirm(ctx *gin.Context) {
 	userId := ctx.Param("userId")
 
-	err := s.service.Confirm(userId)
+	err := t.service.User.Confirm(userId)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
 		return

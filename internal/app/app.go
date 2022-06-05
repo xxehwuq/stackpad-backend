@@ -23,12 +23,13 @@ func Run(cfg *config.Config) {
 
 	db.AutoMigrate(&entity.User{})
 
-	storage := storage.New(db)
-	service := service.New(storage, service.Pkg{
+	pkg := entity.Pkg{
 		PasswordManager: hash.NewPasswordManager(cfg.Hash.PasswordSalt),
 		JwtManager:      jwt.NewJwtManager(cfg.Jwt.Ttl, cfg.Jwt.SigningKey),
-	})
-	transport := transport.New(service)
+	}
+	storage := storage.New(db)
+	service := service.New(storage, pkg)
+	transport := transport.New(service, pkg)
 
 	transport.Init(cfg)
 }
