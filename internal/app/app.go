@@ -9,6 +9,7 @@ import (
 	"github.com/yaroslavyarosh/stackpad-backend/internal/service"
 	"github.com/yaroslavyarosh/stackpad-backend/internal/storage"
 	"github.com/yaroslavyarosh/stackpad-backend/internal/transport"
+	"github.com/yaroslavyarosh/stackpad-backend/pkg/hash"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -22,7 +23,9 @@ func Run(cfg *config.Config) {
 	db.AutoMigrate(&entity.User{})
 
 	storage := storage.New(db)
-	service := service.New(storage)
+	service := service.New(storage, service.Pkg{
+		PasswordManager: hash.NewPasswordManager(cfg.Auth.PasswordSalt),
+	})
 	transport := transport.New(service)
 
 	transport.Init(cfg)

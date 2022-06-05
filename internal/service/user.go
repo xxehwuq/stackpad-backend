@@ -4,6 +4,7 @@ import (
 	gonanoid "github.com/matoous/go-nanoid/v2"
 	"github.com/yaroslavyarosh/stackpad-backend/internal/entity"
 	"github.com/yaroslavyarosh/stackpad-backend/internal/storage"
+	"github.com/yaroslavyarosh/stackpad-backend/pkg/hash"
 )
 
 type UserService interface {
@@ -11,18 +12,22 @@ type UserService interface {
 }
 
 type userService struct {
-	storage storage.UserStorage
+	storage         storage.UserStorage
+	passwordManager hash.PasswordManager
 }
 
-func newUserService(storage storage.UserStorage) *userService {
+func newUserService(storage storage.UserStorage, passwordManager hash.PasswordManager) *userService {
 	return &userService{
-		storage: storage,
+		storage:         storage,
+		passwordManager: passwordManager,
 	}
 }
 
 func (s *userService) SignUp(user entity.User) (string, error) {
 	id, _ := gonanoid.New()
+
 	user.Id = id
+	user.Password = s.passwordManager.Hash(user.Password)
 
 	err := s.storage.Add(user)
 	if err != nil {
