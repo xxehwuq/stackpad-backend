@@ -39,6 +39,7 @@ func (t *Transport) initApi(router *gin.Engine) {
 		{
 			user.POST("/sign-up", t.User.SignUp)
 			user.POST("/sign-in", t.User.SignIn)
+			user.POST("/confirm/:userId", t.User.Confirm)
 		}
 	}
 }

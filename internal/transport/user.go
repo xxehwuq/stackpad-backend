@@ -11,6 +11,7 @@ import (
 type UserTransport interface {
 	SignUp(ctx *gin.Context)
 	SignIn(ctx *gin.Context)
+	Confirm(ctx *gin.Context)
 }
 
 type userTransport struct {
@@ -59,4 +60,16 @@ func (s *userTransport) SignIn(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"token": token,
 	})
+}
+
+func (s *userTransport) Confirm(ctx *gin.Context) {
+	userId := ctx.Param("userId")
+
+	err := s.service.Confirm(userId)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	ctx.Status(http.StatusOK)
 }

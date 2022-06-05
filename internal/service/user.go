@@ -1,8 +1,6 @@
 package service
 
 import (
-	"fmt"
-
 	gonanoid "github.com/matoous/go-nanoid/v2"
 	"github.com/yaroslavyarosh/stackpad-backend/internal/entity"
 	"github.com/yaroslavyarosh/stackpad-backend/internal/storage"
@@ -12,6 +10,7 @@ import (
 type UserService interface {
 	SignUp(user entity.User) (string, error)
 	SignIn(email, password string) (string, error)
+	Confirm(userId string) error
 }
 
 type userService struct {
@@ -46,14 +45,23 @@ func (s *userService) SignUp(user entity.User) (string, error) {
 func (s *userService) SignIn(email, password string) (string, error) {
 	password = s.passwordManager.Hash(password)
 
-	user, err := s.storage.GetByCredentials(email, password)
+	_, err := s.storage.GetByCredentials(email, password)
 	if err != nil {
 		return "", err
 	}
 
-	fmt.Println(user)
-
 	// ! implement generating jwt token
 
 	return "token", nil
+}
+
+func (s *userService) Confirm(userId string) error {
+	err := s.storage.Confirm(userId)
+	if err != nil {
+		return err
+	}
+
+	// ! implement generating jwt token
+
+	return nil
 }

@@ -8,6 +8,7 @@ import (
 type UserStorage interface {
 	Add(user entity.User) error
 	GetByCredentials(email, password string) (entity.User, error)
+	Confirm(userId string) error
 }
 
 type userStorage struct {
@@ -38,4 +39,15 @@ func (s *userStorage) GetByCredentials(email, password string) (entity.User, err
 	}
 
 	return user, nil
+}
+
+func (s *userStorage) Confirm(userId string) error {
+	var user entity.User
+
+	result := s.db.Model(&user).Where("id = ?", userId).Update("is_confirmed", true)
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
 }
