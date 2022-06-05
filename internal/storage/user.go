@@ -20,7 +20,7 @@ func newUserStorage(db *gorm.DB) *userStorage {
 }
 
 func (s *userStorage) Add(user entity.User) error {
-	result := s.db.Create(user)
+	result := s.db.Create(&user)
 	if result.Error != nil {
 		return result.Error
 	}

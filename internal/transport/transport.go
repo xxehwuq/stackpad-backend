@@ -3,6 +3,7 @@ package transport
 import (
 	"fmt"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/yaroslavyarosh/stackpad-backend/config"
 	"github.com/yaroslavyarosh/stackpad-backend/internal/service"
@@ -20,6 +21,12 @@ func New(service *service.Service) *Transport {
 
 func (t *Transport) Init(cfg *config.Config) {
 	router := gin.Default()
+	router.Use(cors.New(cors.Config{
+		AllowAllOrigins: true,
+		AllowHeaders:    []string{"Authorization", "Content-Type"},
+		AllowMethods:    []string{"GET", "POST", "PUT", "DELETE"},
+	}))
+
 	t.initApi(router)
 
 	router.Run(fmt.Sprintf(":%s", cfg.Http.Port))
