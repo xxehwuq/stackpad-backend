@@ -7,6 +7,7 @@ import (
 
 type UserStorage interface {
 	Add(user entity.User) error
+	GetByCredentials(email, password string) (entity.User, error)
 }
 
 type userStorage struct {
@@ -26,4 +27,15 @@ func (s *userStorage) Add(user entity.User) error {
 	}
 
 	return nil
+}
+
+func (s *userStorage) GetByCredentials(email, password string) (entity.User, error) {
+	var user entity.User
+
+	result := s.db.Take(&user, "email = ? AND password = ?", email, password)
+	if result.Error != nil {
+		return entity.User{}, result.Error
+	}
+
+	return user, nil
 }

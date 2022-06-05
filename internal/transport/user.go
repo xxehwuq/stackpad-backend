@@ -10,6 +10,7 @@ import (
 
 type UserTransport interface {
 	SignUp(ctx *gin.Context)
+	SignIn(ctx *gin.Context)
 }
 
 type userTransport struct {
@@ -36,7 +37,26 @@ func (s *userTransport) SignUp(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{
+	ctx.JSON(http.StatusOK, gin.H{
+		"token": token,
+	})
+}
+
+func (s *userTransport) SignIn(ctx *gin.Context) {
+	var user entity.User
+
+	if err := ctx.BindJSON(&user); err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	token, err := s.service.SignIn(user.Email, user.Password)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
 		"token": token,
 	})
 }

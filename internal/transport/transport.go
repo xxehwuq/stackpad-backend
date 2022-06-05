@@ -38,6 +38,7 @@ func (t *Transport) initApi(router *gin.Engine) {
 		user := api.Group("/user")
 		{
 			user.POST("/sign-up", t.User.SignUp)
+			user.POST("/sign-in", t.User.SignIn)
 		}
 	}
 }
