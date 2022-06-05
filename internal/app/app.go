@@ -1,6 +1,7 @@
 package app
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/yaroslavyarosh/stackpad-backend/config"
@@ -13,7 +14,7 @@ import (
 )
 
 func Run(cfg *config.Config) {
-	db, err := gorm.Open(postgres.Open("user=postgres password=kJQ*Wo8MnNJfab5mnfjk host=db.rjxuletivavhwcvffefy.supabase.co port=5432 dbname=postgres"), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(fmt.Sprintf("user=%s password=%s host=%s port=%s dbname=%s", cfg.Db.Username, cfg.Db.Password, cfg.Db.Host, cfg.Db.Port, cfg.Db.Name)), &gorm.Config{})
 	if err != nil {
 		log.Fatal("error connecting to database: ", err)
 	}
