@@ -10,6 +10,7 @@ import (
 	"github.com/yaroslavyarosh/stackpad-backend/internal/storage"
 	"github.com/yaroslavyarosh/stackpad-backend/internal/transport"
 	"github.com/yaroslavyarosh/stackpad-backend/pkg/hash"
+	"github.com/yaroslavyarosh/stackpad-backend/pkg/jwt"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -24,7 +25,8 @@ func Run(cfg *config.Config) {
 
 	storage := storage.New(db)
 	service := service.New(storage, service.Pkg{
-		PasswordManager: hash.NewPasswordManager(cfg.Auth.PasswordSalt),
+		PasswordManager: hash.NewPasswordManager(cfg.Hash.PasswordSalt),
+		JwtManager:      jwt.NewJwtManager(cfg.Jwt.Ttl, cfg.Jwt.SigningKey),
 	})
 	transport := transport.New(service)
 

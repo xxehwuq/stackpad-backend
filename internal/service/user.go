@@ -5,6 +5,7 @@ import (
 	"github.com/yaroslavyarosh/stackpad-backend/internal/entity"
 	"github.com/yaroslavyarosh/stackpad-backend/internal/storage"
 	"github.com/yaroslavyarosh/stackpad-backend/pkg/hash"
+	"github.com/yaroslavyarosh/stackpad-backend/pkg/jwt"
 )
 
 type UserService interface {
@@ -16,12 +17,14 @@ type UserService interface {
 type userService struct {
 	storage         storage.UserStorage
 	passwordManager hash.PasswordManager
+	jwtManager      jwt.JwtManager
 }
 
-func newUserService(storage storage.UserStorage, passwordManager hash.PasswordManager) *userService {
+func newUserService(storage storage.UserStorage, passwordManager hash.PasswordManager, jwtManager jwt.JwtManager) *userService {
 	return &userService{
 		storage:         storage,
 		passwordManager: passwordManager,
+		jwtManager:      jwtManager,
 	}
 }
 
@@ -37,22 +40,28 @@ func (s *userService) SignUp(user entity.User) (string, error) {
 		return "", err
 	}
 
-	// ! implement generating jwt token
+	token, err := s.jwtManager.GenerateToken(id)
+	if err != nil {
+		return "", err
+	}
 
-	return "token", nil
+	return token, nil
 }
 
 func (s *userService) SignIn(email, password string) (string, error) {
 	password = s.passwordManager.Hash(password)
 
-	_, err := s.storage.GetByCredentials(email, password)
+	user, err := s.storage.GetByCredentials(email, password)
 	if err != nil {
 		return "", err
 	}
 
-	// ! implement generating jwt token
+	token, err := s.jwtManager.GenerateToken(user.Id)
+	if err != nil {
+		return "", err
+	}
 
-	return "token", nil
+	return token, nil
 }
 
 func (s *userService) Confirm(userId string) error {
@@ -60,8 +69,6 @@ func (s *userService) Confirm(userId string) error {
 	if err != nil {
 		return err
 	}
-
-	// ! implement generating jwt token
 
 	return nil
 }

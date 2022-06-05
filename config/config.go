@@ -1,6 +1,8 @@
 package config
 
 import (
+	"time"
+
 	"github.com/spf13/viper"
 )
 
@@ -17,8 +19,13 @@ type Config struct {
 		Port     string `mapstructure:"DB_PORT"`
 	}
 
-	Auth struct {
+	Hash struct {
 		PasswordSalt string `mapstructure:"PASSWORD_SALT"`
+	}
+
+	Jwt struct {
+		Ttl        time.Duration `mapstructure:"ttl"`
+		SigningKey string        `mapstructure:"JWT_SIGNING_KEY"`
 	}
 }
 
@@ -46,6 +53,9 @@ func readYaml(cfg *Config) error {
 	if err := viper.UnmarshalKey("http", &cfg.Http); err != nil {
 		return err
 	}
+	if err := viper.UnmarshalKey("jwt", &cfg.Jwt); err != nil {
+		return err
+	}
 
 	return nil
 }
@@ -60,7 +70,10 @@ func readEnv(cfg *Config) error {
 	if err := viper.Unmarshal(&cfg.Db); err != nil {
 		return err
 	}
-	if err := viper.Unmarshal(&cfg.Auth); err != nil {
+	if err := viper.Unmarshal(&cfg.Hash); err != nil {
+		return err
+	}
+	if err := viper.Unmarshal(&cfg.Jwt); err != nil {
 		return err
 	}
 

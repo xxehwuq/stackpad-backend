@@ -1,2 +1,5 @@
 http:
   port: 8000
+
+jwt:
+  ttl: 15m
