@@ -25,9 +25,9 @@ func newNotebookStorage(db *gorm.DB) *notebookStorage {
 
 func (s *notebookStorage) Test() {
 	id, _ := gonanoid.New()
-	notebook := entity.Notebook{Id: id, Title: "Some title"}
+	// notebook := entity.Notebook{Id: id, Title: "Some title"}
 
-	if result := s.db.Create(&notebook); result.Error != nil {
+	if result := s.db.Create(&entity.User{Id: id, Name: "Yaroslav", Email: "yaroslavyarosh.com@protonmail.com", Password: "LT4hlIGDzp1SspZ8ev6B"}); result.Error != nil {
 		log.Fatal(result.Error)
 	}
 

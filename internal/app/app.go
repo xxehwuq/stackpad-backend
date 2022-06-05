@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/yaroslavyarosh/stackpad-backend/config"
+	"github.com/yaroslavyarosh/stackpad-backend/internal/entity"
 	"github.com/yaroslavyarosh/stackpad-backend/internal/service"
 	"github.com/yaroslavyarosh/stackpad-backend/internal/storage"
 	"github.com/yaroslavyarosh/stackpad-backend/internal/transport"
@@ -16,6 +17,8 @@ func Run(cfg *config.Config) {
 	if err != nil {
 		log.Fatal("error connecting to database: ", err)
 	}
+
+	db.AutoMigrate(&entity.Notebook{}, &entity.User{})
 
 	storage := storage.New(db)
 	service := service.New(storage)
