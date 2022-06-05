@@ -5,11 +5,11 @@ import (
 )
 
 type Service struct {
-	Notebook NotebookService
+	User UserService
 }
 
 func New(storage *storage.Storage) *Service {
 	return &Service{
-		Notebook: newNotebookService(storage.Notebook),
+		User: newUserService(storage.User),
 	}
 }

@@ -9,12 +9,12 @@ import (
 )
 
 type Transport struct {
-	Notebook NotebookTransport
+	User UserTransport
 }
 
 func New(service *service.Service) *Transport {
 	return &Transport{
-		Notebook: newNotebookTransport(service.Notebook),
+		User: newUserTransport(service.User),
 	}
 }
 
@@ -28,9 +28,9 @@ func (t *Transport) Init(cfg *config.Config) {
 func (t *Transport) initApi(router *gin.Engine) {
 	api := router.Group("/api")
 	{
-		notebooks := api.Group("/notebook")
+		user := api.Group("/user")
 		{
-			notebooks.GET("", t.Notebook.Test)
+			user.POST("/sign-up", t.User.SignUp)
 		}
 	}
 }

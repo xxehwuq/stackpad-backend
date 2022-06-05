@@ -18,7 +18,7 @@ func Run(cfg *config.Config) {
 		log.Fatal("error connecting to database: ", err)
 	}
 
-	db.AutoMigrate(&entity.Notebook{}, &entity.User{})
+	db.AutoMigrate(&entity.User{})
 
 	storage := storage.New(db)
 	service := service.New(storage)
