@@ -36,13 +36,13 @@ func (t *Transport) Init(cfg *config.Config) {
 func (t *Transport) initApi(router *gin.Engine) {
 	api := router.Group("/api")
 	{
-		// authApi := api.Group("", t.setUserId)
+		authApi := api.Group("", t.setUserId)
+		authApi.GET("/user/confirm", t.userConfirm)
 
 		user := api.Group("/user")
 		{
 			user.POST("/sign-up", t.userSignUp)
 			user.POST("/sign-in", t.userSignIn)
-			user.POST("/confirm/:userId", t.userConfirm)
 		}
 	}
 }

@@ -46,7 +46,7 @@ func (t *Transport) userSignIn(ctx *gin.Context) {
 }
 
 func (t *Transport) userConfirm(ctx *gin.Context) {
-	userId := ctx.Param("userId")
+	userId := t.getUserId(ctx)
 
 	err := t.service.User.Confirm(userId)
 	if err != nil {
