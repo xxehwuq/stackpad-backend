@@ -1,6 +1,8 @@
 package transport
 
 import (
+	"log"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/yaroslavyarosh/stackpad-backend/config"
@@ -30,7 +32,7 @@ func (t *Transport) Init(cfg *config.Config) {
 
 	t.initApi(router)
 
-	router.Run(":" + cfg.Http.Port)
+	log.Fatal(router.Run(":" + cfg.Http.Port))
 }
 
 func (t *Transport) initApi(router *gin.Engine) {
