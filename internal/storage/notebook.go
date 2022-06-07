@@ -7,6 +7,7 @@ import (
 
 type NotebookStorage interface {
 	Add(notebook entity.Notebook) error
+	Get(userId string) ([]entity.Notebook, error)
 }
 
 type notebookStorage struct {
@@ -26,4 +27,15 @@ func (s *notebookStorage) Add(notebook entity.Notebook) error {
 	}
 
 	return nil
+}
+
+func (s *notebookStorage) Get(userId string) ([]entity.Notebook, error) {
+	var notebooks []entity.Notebook
+
+	result := s.db.Where("user_id = ?", userId).Find(&notebooks)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return notebooks, nil
 }

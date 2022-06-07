@@ -8,6 +8,7 @@ import (
 
 type NotebookService interface {
 	Add(notebook entity.Notebook, userId string) (string, error)
+	Get(userId string) ([]entity.Notebook, error)
 }
 
 type notebookService struct {
@@ -32,4 +33,13 @@ func (s *notebookService) Add(notebook entity.Notebook, userId string) (string, 
 	}
 
 	return id, nil
+}
+
+func (s *notebookService) Get(userId string) ([]entity.Notebook, error) {
+	notebooks, err := s.storage.Get(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	return notebooks, nil
 }
