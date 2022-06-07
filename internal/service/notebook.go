@@ -24,6 +24,7 @@ func (s *notebookService) Add(notebook entity.Notebook, userId string) (string, 
 	id, _ := gonanoid.New()
 
 	notebook.Id = id
+	notebook.UserId = userId
 
 	err := s.storage.Add(notebook)
 	if err != nil {
