@@ -3,11 +3,13 @@ package storage
 import "gorm.io/gorm"
 
 type Storage struct {
-	User UserStorage
+	User     UserStorage
+	Notebook NotebookStorage
 }
 
 func New(db *gorm.DB) *Storage {
 	return &Storage{
-		User: newUserStorage(db),
+		User:     newUserStorage(db),
+		Notebook: newNotebookStorage(db),
 	}
 }

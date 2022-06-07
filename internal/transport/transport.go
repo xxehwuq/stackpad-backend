@@ -39,12 +39,17 @@ func (t *Transport) initApi(router *gin.Engine) {
 	api := router.Group("/api")
 	{
 		authApi := api.Group("", t.setUserId)
-		authApi.GET("/user/confirm", t.userConfirm)
+
+		notebook := authApi.Group("/notebook")
+		{
+			notebook.POST("", t.notebookAdd)
+		}
 
 		user := api.Group("/user")
 		{
 			user.POST("/sign-up", t.userSignUp)
 			user.POST("/sign-in", t.userSignIn)
+			authApi.GET("/user/confirm", t.userConfirm)
 		}
 	}
 }

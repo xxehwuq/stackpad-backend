@@ -6,11 +6,13 @@ import (
 )
 
 type Service struct {
-	User UserService
+	User     UserService
+	Notebook NotebookService
 }
 
 func New(storage *storage.Storage, pkg entity.Pkg) *Service {
 	return &Service{
-		User: newUserService(storage.User, pkg.PasswordManager, pkg.JwtManager),
+		User:     newUserService(storage.User, pkg.PasswordManager, pkg.JwtManager),
+		Notebook: newNotebookService(storage.Notebook),
 	}
 }
