@@ -43,7 +43,7 @@ func (t *Transport) initApi(router *gin.Engine) {
 		notebook := authApi.Group("/notebook")
 		{
 			notebook.POST("", t.notebookAdd)
-			notebook.GET("", t.notebookGet)
+			notebook.GET("", t.notebookGetAll)
 			notebook.GET("/:id", t.notebookGetById)
 		}
 

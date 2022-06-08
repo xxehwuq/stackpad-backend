@@ -7,7 +7,7 @@ import (
 
 type NotebookStorage interface {
 	Add(notebook entity.Notebook) error
-	Get(userId string) ([]entity.Notebook, error)
+	GetAll(userId string) ([]entity.Notebook, error)
 	GetById(notebookId, userId string) (entity.Notebook, error)
 }
 
@@ -30,7 +30,7 @@ func (s *notebookStorage) Add(notebook entity.Notebook) error {
 	return nil
 }
 
-func (s *notebookStorage) Get(userId string) ([]entity.Notebook, error) {
+func (s *notebookStorage) GetAll(userId string) ([]entity.Notebook, error) {
 	var notebooks []entity.Notebook
 
 	result := s.db.Where("user_id = ?", userId).Find(&notebooks)
