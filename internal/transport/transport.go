@@ -44,6 +44,7 @@ func (t *Transport) initApi(router *gin.Engine) {
 		{
 			notebook.POST("", t.notebookAdd)
 			notebook.GET("", t.notebookGet)
+			notebook.GET("/:id", t.notebookGetById)
 		}
 
 		user := api.Group("/user")

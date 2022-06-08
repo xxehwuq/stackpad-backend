@@ -9,6 +9,7 @@ import (
 type NotebookService interface {
 	Add(notebook entity.Notebook, userId string) (string, error)
 	Get(userId string) ([]entity.Notebook, error)
+	GetById(notebookId, userId string) (entity.Notebook, error)
 }
 
 type notebookService struct {
@@ -42,4 +43,13 @@ func (s *notebookService) Get(userId string) ([]entity.Notebook, error) {
 	}
 
 	return notebooks, nil
+}
+
+func (s *notebookService) GetById(notebookId, userId string) (entity.Notebook, error) {
+	notebook, err := s.storage.GetById(notebookId, userId)
+	if err != nil {
+		return entity.Notebook{}, err
+	}
+
+	return notebook, nil
 }

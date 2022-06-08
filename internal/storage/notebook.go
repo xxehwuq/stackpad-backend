@@ -8,6 +8,7 @@ import (
 type NotebookStorage interface {
 	Add(notebook entity.Notebook) error
 	Get(userId string) ([]entity.Notebook, error)
+	GetById(notebookId, userId string) (entity.Notebook, error)
 }
 
 type notebookStorage struct {
@@ -38,4 +39,15 @@ func (s *notebookStorage) Get(userId string) ([]entity.Notebook, error) {
 	}
 
 	return notebooks, nil
+}
+
+func (s *notebookStorage) GetById(notebookId, userId string) (entity.Notebook, error) {
+	var notebook entity.Notebook
+
+	result := s.db.Take(&notebook, "id = ? AND user_id = ?", notebookId, userId)
+	if result.Error != nil {
+		return entity.Notebook{}, result.Error
+	}
+
+	return notebook, nil
 }

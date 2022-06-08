@@ -38,3 +38,16 @@ func (t *Transport) notebookGet(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, notebooks)
 }
+
+func (t *Transport) notebookGetById(ctx *gin.Context) {
+	userId := t.getUserId(ctx)
+	notebookId := ctx.Param("id")
+
+	notebook, err := t.service.Notebook.GetById(notebookId, userId)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	ctx.JSON(http.StatusOK, notebook)
+}
