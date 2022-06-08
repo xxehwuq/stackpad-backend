@@ -27,10 +27,11 @@ func (t *Transport) noteAdd(ctx *gin.Context) {
 	})
 }
 
-func (t *Transport) noteGetAll(ctx *gin.Context) {
+func (t *Transport) noteGetAllFromNotebook(ctx *gin.Context) {
 	userId := t.getUserId(ctx)
+	notebookId := ctx.Param("notebookId")
 
-	notes, err := t.service.Note.GetAll(userId)
+	notes, err := t.service.Note.GetAllFromNotebook(notebookId, userId)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
 		return

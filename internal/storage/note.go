@@ -7,7 +7,7 @@ import (
 
 type NoteStorage interface {
 	Add(note entity.Note) error
-	GetAll(userId string) ([]entity.Note, error)
+	GetAllFromNotebook(notebookId, userId string) ([]entity.Note, error)
 	GetById(noteId, userId string) (entity.Note, error)
 }
 
@@ -30,10 +30,10 @@ func (s *noteStorage) Add(note entity.Note) error {
 	return nil
 }
 
-func (s *noteStorage) GetAll(userId string) ([]entity.Note, error) {
+func (s *noteStorage) GetAllFromNotebook(notebookId, userId string) ([]entity.Note, error) {
 	var notes []entity.Note
 
-	result := s.db.Where("user_id = ?", userId).Find(&notes)
+	result := s.db.Where("notebook_id = ? AND user_id = ?", notebookId, userId).Find(&notes)
 	if result.Error != nil {
 		return nil, result.Error
 	}

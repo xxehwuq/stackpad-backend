@@ -8,7 +8,7 @@ import (
 
 type NoteService interface {
 	Add(note entity.Note, userId string) (string, error)
-	GetAll(userId string) ([]entity.Note, error)
+	GetAllFromNotebook(notebookId, userId string) ([]entity.Note, error)
 	GetById(noteId, userId string) (entity.Note, error)
 }
 
@@ -36,8 +36,8 @@ func (s *noteService) Add(note entity.Note, userId string) (string, error) {
 	return id, nil
 }
 
-func (s *noteService) GetAll(userId string) ([]entity.Note, error) {
-	notes, err := s.storage.GetAll(userId)
+func (s *noteService) GetAllFromNotebook(notebookId, userId string) ([]entity.Note, error) {
+	notes, err := s.storage.GetAllFromNotebook(notebookId, userId)
 	if err != nil {
 		return nil, err
 	}
