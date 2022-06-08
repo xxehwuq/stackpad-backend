@@ -47,6 +47,13 @@ func (t *Transport) initApi(router *gin.Engine) {
 			notebook.GET("/:id", t.notebookGetById)
 		}
 
+		note := authApi.Group("/note")
+		{
+			note.POST("", t.noteAdd)
+			note.GET("", t.noteGetAll)
+			note.GET("/:id", t.noteGetById)
+		}
+
 		user := api.Group("/user")
 		{
 			user.POST("/sign-up", t.userSignUp)
