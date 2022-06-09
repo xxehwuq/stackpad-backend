@@ -1,6 +1,7 @@
 package transport
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -15,6 +16,8 @@ func (t *Transport) noteAdd(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
 		return
 	}
+
+	fmt.Println(note)
 
 	id, err := t.service.Note.Add(note, userId)
 	if err != nil {
