@@ -1,7 +1,6 @@
 package transport
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,16 +9,15 @@ import (
 
 func (t *Transport) noteAdd(ctx *gin.Context) {
 	var note entity.Note
-	userId := t.getUserId(ctx)
+
+	note.UserId = t.getUserId(ctx)
 
 	if err := ctx.BindJSON(&note); err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
 		return
 	}
 
-	fmt.Println(note)
-
-	id, err := t.service.Note.Add(note, userId)
+	id, err := t.service.Note.Add(note)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
 		return
@@ -28,6 +26,25 @@ func (t *Transport) noteAdd(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"id": id,
 	})
+}
+
+func (t *Transport) noteUpdate(ctx *gin.Context) {
+	var note entity.Note
+
+	note.UserId = t.getUserId(ctx)
+
+	if err := ctx.BindJSON(&note); err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	err := t.service.Note.Update(note)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	ctx.JSON(http.StatusOK, "")
 }
 
 func (t *Transport) noteGetAllFromNotebook(ctx *gin.Context) {

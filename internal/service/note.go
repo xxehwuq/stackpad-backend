@@ -7,7 +7,8 @@ import (
 )
 
 type NoteService interface {
-	Add(note entity.Note, userId string) (string, error)
+	Add(note entity.Note) (string, error)
+	Update(note entity.Note) error
 	GetAllFromNotebook(notebookId, userId string) ([]entity.Note, error)
 	GetById(noteId, userId string) (entity.Note, error)
 }
@@ -22,11 +23,10 @@ func newNoteService(storage storage.NoteStorage) *noteService {
 	}
 }
 
-func (s *noteService) Add(note entity.Note, userId string) (string, error) {
+func (s *noteService) Add(note entity.Note) (string, error) {
 	id, _ := gonanoid.New()
 
 	note.Id = id
-	note.UserId = userId
 
 	err := s.storage.Add(note)
 	if err != nil {
@@ -34,6 +34,15 @@ func (s *noteService) Add(note entity.Note, userId string) (string, error) {
 	}
 
 	return id, nil
+}
+
+func (s *noteService) Update(note entity.Note) error {
+	err := s.storage.Update(note)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (s *noteService) GetAllFromNotebook(notebookId, userId string) ([]entity.Note, error) {

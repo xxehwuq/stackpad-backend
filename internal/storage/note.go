@@ -7,6 +7,7 @@ import (
 
 type NoteStorage interface {
 	Add(note entity.Note) error
+	Update(note entity.Note) error
 	GetAllFromNotebook(notebookId, userId string) ([]entity.Note, error)
 	GetById(noteId, userId string) (entity.Note, error)
 }
@@ -23,6 +24,15 @@ func newNoteStorage(db *gorm.DB) *noteStorage {
 
 func (s *noteStorage) Add(note entity.Note) error {
 	result := s.db.Create(&note)
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
+}
+
+func (s *noteStorage) Update(note entity.Note) error {
+	result := s.db.Save(&note)
 	if result.Error != nil {
 		return result.Error
 	}

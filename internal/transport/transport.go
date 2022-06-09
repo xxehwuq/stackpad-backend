@@ -50,6 +50,7 @@ func (t *Transport) initApi(router *gin.Engine) {
 		note := authApi.Group("/note")
 		{
 			note.POST("", t.noteAdd)
+			note.PUT("", t.noteUpdate)
 			note.GET("/notebook/:notebookId", t.noteGetAllFromNotebook)
 			note.GET("/:id", t.noteGetById)
 		}
