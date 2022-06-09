@@ -2,4 +2,4 @@ http:
   port: 8000
 
 jwt:
-  ttl: 5m
+  ttl: 15m
