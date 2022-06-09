@@ -10,6 +10,7 @@ type NoteService interface {
 	Add(note entity.Note) (string, error)
 	Update(note entity.Note) error
 	GetAllFromNotebook(notebookId, userId string) ([]entity.Note, error)
+	GetAllBookmarks(userId string) ([]entity.Note, error)
 	GetById(noteId, userId string) (entity.Note, error)
 }
 
@@ -52,6 +53,15 @@ func (s *noteService) GetAllFromNotebook(notebookId, userId string) ([]entity.No
 	}
 
 	return notes, nil
+}
+
+func (s *noteService) GetAllBookmarks(userId string) ([]entity.Note, error) {
+	bookmarks, err := s.storage.GetAllBookmarks(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	return bookmarks, nil
 }
 
 func (s *noteService) GetById(noteId, userId string) (entity.Note, error) {

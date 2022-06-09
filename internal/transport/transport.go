@@ -52,6 +52,7 @@ func (t *Transport) initApi(router *gin.Engine) {
 			note.POST("", t.noteAdd)
 			note.PUT("", t.noteUpdate)
 			note.GET("/notebook/:notebookId", t.noteGetAllFromNotebook)
+			note.GET("/bookmarks", t.noteGetAllBookmarks)
 			note.GET("/:id", t.noteGetById)
 		}
 

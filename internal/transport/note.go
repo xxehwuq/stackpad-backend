@@ -60,6 +60,18 @@ func (t *Transport) noteGetAllFromNotebook(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, notes)
 }
 
+func (t *Transport) noteGetAllBookmarks(ctx *gin.Context) {
+	userId := t.getUserId(ctx)
+
+	bookmarks, err := t.service.Note.GetAllBookmarks(userId)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	ctx.JSON(http.StatusOK, bookmarks)
+}
+
 func (t *Transport) noteGetById(ctx *gin.Context) {
 	userId := t.getUserId(ctx)
 	noteId := ctx.Param("id")

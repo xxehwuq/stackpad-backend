@@ -9,6 +9,7 @@ type NoteStorage interface {
 	Add(note entity.Note) error
 	Update(note entity.Note) error
 	GetAllFromNotebook(notebookId, userId string) ([]entity.Note, error)
+	GetAllBookmarks(userId string) ([]entity.Note, error)
 	GetById(noteId, userId string) (entity.Note, error)
 }
 
@@ -49,6 +50,17 @@ func (s *noteStorage) GetAllFromNotebook(notebookId, userId string) ([]entity.No
 	}
 
 	return notes, nil
+}
+
+func (s *noteStorage) GetAllBookmarks(userId string) ([]entity.Note, error) {
+	var bookmarks []entity.Note
+
+	result := s.db.Where("is_bookmark = true AND user_id = ?", userId).Find(&bookmarks)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return bookmarks, nil
 }
 
 func (s *noteStorage) GetById(noteId, userId string) (entity.Note, error) {
