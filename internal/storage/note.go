@@ -55,7 +55,7 @@ func (s *noteStorage) GetAllFromNotebook(notebookId, userId string) ([]entity.No
 func (s *noteStorage) GetAllBookmarks(userId string) ([]entity.Note, error) {
 	var bookmarks []entity.Note
 
-	result := s.db.Where("is_bookmark = true AND user_id = ?", userId).Find(&bookmarks)
+	result := s.db.Where("is_bookmarked = true AND user_id = ?", userId).Find(&bookmarks)
 	if result.Error != nil {
 		return nil, result.Error
 	}
