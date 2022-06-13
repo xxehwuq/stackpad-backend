@@ -27,8 +27,8 @@ func (t *Transport) Init(cfg *config.Config) {
 	router.Use(cors.New(cors.Config{
 		AllowAllOrigins: true,
 		AllowOrigins:    []string{"http://localhost:3000"},
-		AllowHeaders:    []string{"Authorization", "Content-Type", "Access-Control-Allow-Origin", "X-Requested-With"},
-		AllowMethods:    []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders:    []string{"Authorization", "Content-Type"},
+		AllowMethods:    []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 	}))
 
 	t.initApi(router)
