@@ -27,7 +27,7 @@ func (t *Transport) Init(cfg *config.Config) {
 	gin.SetMode(gin.ReleaseMode)
 	router.Use(cors.New(cors.Config{
 		AllowAllOrigins: true,
-		AllowOrigins:    []string{"http://localhost:3000"},
+		AllowOrigins:    []string{"http://localhost:3000", "188.163.34.178"},
 		AllowHeaders:    []string{"Authorization", "Content-Type"},
 		AllowMethods:    []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 	}))
