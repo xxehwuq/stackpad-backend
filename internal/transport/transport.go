@@ -24,6 +24,7 @@ func New(service *service.Service, pkg entity.Pkg) *Transport {
 
 func (t *Transport) Init(cfg *config.Config) {
 	router := gin.Default()
+	gin.SetMode(gin.ReleaseMode)
 	router.Use(cors.New(cors.Config{
 		AllowAllOrigins: true,
 		AllowOrigins:    []string{"http://localhost:3000"},
