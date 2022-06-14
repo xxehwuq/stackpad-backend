@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/yaroslavyarosh/stackpad-backend/config"
 	"github.com/yaroslavyarosh/stackpad-backend/internal/entity"
@@ -30,8 +31,8 @@ func (t *Transport) Init(cfg *config.Config) {
 		c.JSON(http.StatusOK, c.ClientIP())
 	})
 
-	// router.Use(cors.New(cors.DefaultConfig()))
-	router.Use(CORSMiddleware())
+	router.Use(cors.Default())
+	// router.Use(CORSMiddleware())
 
 	t.initApi(router)
 
