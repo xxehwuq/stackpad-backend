@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/yaroslavyarosh/stackpad-backend/config"
 	"github.com/yaroslavyarosh/stackpad-backend/internal/entity"
@@ -25,16 +24,16 @@ func New(service *service.Service, pkg entity.Pkg) *Transport {
 
 func (t *Transport) Init(cfg *config.Config) {
 	router := gin.Default()
-	// router.SetTrustedProxies([]string{"http://192.168.88.252:3000", "http://192.168.88.45:3000", "https://stackpad.herokuapp.com/"})
+
+	// router.Use(cors.Default())
+	router.Use(CORSMiddleware())
+
+	router.SetTrustedProxies([]string{"http://192.168.88.252:3000", "http://192.168.88.45:3000", "https://stackpad.herokuapp.com/"})
 
 	router.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, c.ClientIP())
 	})
-
 	t.initApi(router)
-
-	router.Use(cors.Default())
-	// router.Use(CORSMiddleware())
 
 	log.Fatal(router.Run(":" + cfg.Http.Port))
 }
