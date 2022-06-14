@@ -25,11 +25,12 @@ func New(service *service.Service, pkg entity.Pkg) *Transport {
 
 func (t *Transport) Init(cfg *config.Config) {
 	router := gin.New()
-	router.Use(cors.New(cors.Config{
-		AllowAllOrigins: true,
-		AllowHeaders:    []string{"Authorization", "Content-Type", "X-Requested-With", "Access-Control-Allow-Origin"},
-		AllowMethods:    []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-	}))
+	// router.Use(cors.New(cors.Config{
+	// 	AllowAllOrigins: true,
+	// 	AllowHeaders:    []string{"Authorization", "Content-Type", "X-Requested-With", "Access-Control-Allow-Origin"},
+	// 	AllowMethods:    []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+	// }))
+	router.Use(cors.Default())
 
 	t.initApi(router)
 
