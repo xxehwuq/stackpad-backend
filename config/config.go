@@ -8,7 +8,7 @@ import (
 
 type Config struct {
 	Http struct {
-		Port string `mapstructure:"PORT"`
+		Port int `mapstructure:"PORT"`
 	}
 
 	Db struct {
