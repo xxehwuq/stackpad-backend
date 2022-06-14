@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/yaroslavyarosh/stackpad-backend/config"
 	"github.com/yaroslavyarosh/stackpad-backend/internal/entity"
@@ -31,11 +30,8 @@ func (t *Transport) Init(cfg *config.Config) {
 		c.JSON(http.StatusOK, c.ClientIP())
 	})
 
-	router.Use(cors.New(cors.Config{
-		AllowOrigins: []string{"http://192.168.88.252:3000"},
-		AllowHeaders: []string{"Authorization", "Content-Type", "X-Requested-With", "Access-Control-Allow-Origin"},
-		AllowMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-	}))
+	// router.Use(cors.New(cors.DefaultConfig()))
+	router.Use(CORSMiddleware())
 
 	t.initApi(router)
 
@@ -70,5 +66,21 @@ func (t *Transport) initApi(router *gin.Engine) {
 			user.POST("/sign-in", t.userSignIn)
 			authApi.GET("/user/confirm", t.userConfirm)
 		}
+	}
+}
+
+func CORSMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+
+		c.Next()
 	}
 }
