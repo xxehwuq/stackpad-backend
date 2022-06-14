@@ -27,7 +27,7 @@ func New(service *service.Service, pkg entity.Pkg) *Transport {
 func (t *Transport) Init(cfg *config.Config) {
 	router := gin.New()
 	router.Use(cors.New(cors.Config{
-		AllowOrigins: []string{"https://stackpad.vercel.app"},
+		AllowOrigins: []string{"https://stackpad.vercel.app", "http://localhost:3000"},
 		AllowMethods: []string{"GET", "POST", "PUT", "DELETE"},
 		AllowHeaders: []string{"Authorization", "Content-type", "Access-Control-Allow-Headers", "Access-Control-Allow-Origin"},
 	}))
