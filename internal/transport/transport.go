@@ -36,7 +36,8 @@ func (t *Transport) Init(cfg *config.Config) {
 	})
 	t.initApi(router)
 
-	log.Fatal(router.Run(":" + cfg.Http.Port))
+	log.Fatal(router.Run())
+	// log.Fatal(router.Run(":" + cfg.Http.Port))
 	// log.Fatal(router.Run(fmt.Sprintf(":%d", cfg.Http.Port)))
 }
 
