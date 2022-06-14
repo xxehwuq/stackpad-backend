@@ -1,8 +1,8 @@
 package transport
 
 import (
-	"fmt"
 	"log"
+	"net/http"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -25,24 +25,20 @@ func New(service *service.Service, pkg entity.Pkg) *Transport {
 
 func (t *Transport) Init(cfg *config.Config) {
 	router := gin.Default()
-	router.SetTrustedProxies([]string{"localhost:3000"})
+	router.SetTrustedProxies([]string{"192.168.88.252:3000"})
 
 	router.GET("/", func(c *gin.Context) {
-		// If the client is 192.168.1.2, use the X-Forwarded-For
-		// header to deduce the original client IP from the trust-
-		// worthy parts of that header.
-		// Otherwise, simply return the direct client IP
-		fmt.Printf("ClientIP: %s\n", c.ClientIP())
+		c.JSON(http.StatusOK, c.ClientIP())
 	})
 
-	// router.Use(cors.New(cors.Config{
-	// 	AllowAllOrigins: true,
-	// 	AllowHeaders:    []string{"Authorization", "Content-Type", "X-Requested-With", "Access-Control-Allow-Origin"},
-	// 	AllowMethods:    []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-	// }))
-	router.Use(cors.Default())
+	router.Use(cors.New(cors.Config{
+		AllowOrigins: []string{"192.168.88.252:3000"},
+		AllowHeaders: []string{"Authorization", "Content-Type", "X-Requested-With", "Access-Control-Allow-Origin"},
+		AllowMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+	}))
 
 	t.initApi(router)
+
 	log.Fatal(router.Run(":" + cfg.Http.Port))
 }
 
