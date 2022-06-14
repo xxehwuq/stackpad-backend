@@ -27,13 +27,13 @@ func New(service *service.Service, pkg entity.Pkg) *Transport {
 func (t *Transport) Init(cfg *config.Config) {
 	router := gin.New()
 	router.Use(cors.New(cors.Config{
-		AllowOrigins: []string{"https://stackpad.vercel.app/", "https://stackpad.herokuapp.com/"},
+		AllowOrigins: []string{"https://stackpad.vercel.app"},
 		AllowMethods: []string{"GET", "POST", "PUT", "DELETE"},
-		AllowHeaders: []string{"Authorization", "Content-type", "Access-Control-Allow-Headers"},
+		AllowHeaders: []string{"Authorization", "Content-type", "Access-Control-Allow-Headers", "Access-Control-Allow-Origin"},
 	}))
 	router.Use(favicon.New("favicon.ico"))
 
-	router.SetTrustedProxies([]string{"https://stackpad.vercel.app/", "https://stackpad.herokuapp.com/"})
+	router.SetTrustedProxies([]string{"https://stackpad.vercel.app"})
 
 	router.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, c.ClientIP())
