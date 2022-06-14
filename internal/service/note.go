@@ -12,6 +12,7 @@ type NoteService interface {
 	GetAllFromNotebook(notebookId, userId string) ([]entity.Note, error)
 	GetAllBookmarks(userId string) ([]entity.Note, error)
 	GetById(noteId, userId string) (entity.Note, error)
+	DeleteById(note entity.Note) error
 }
 
 type noteService struct {
@@ -71,4 +72,13 @@ func (s *noteService) GetById(noteId, userId string) (entity.Note, error) {
 	}
 
 	return note, nil
+}
+
+func (s *noteService) DeleteById(note entity.Note) error {
+	err := s.storage.DeleteById(note)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

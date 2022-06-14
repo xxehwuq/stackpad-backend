@@ -2,6 +2,7 @@ package transport
 
 import (
 	"log"
+	"net/http"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -23,13 +24,11 @@ func New(service *service.Service, pkg entity.Pkg) *Transport {
 }
 
 func (t *Transport) Init(cfg *config.Config) {
-	router := gin.Default()
-	gin.SetMode(gin.ReleaseMode)
+	router := gin.New()
 	router.Use(cors.New(cors.Config{
 		AllowAllOrigins: true,
-		// AllowOrigins:    []string{"http://localhost:3000", "188.163.34.178"},
-		AllowHeaders: []string{"Authorization", "Content-Type", "X-Requested-With", "Access-Control-Allow-Origin"},
-		AllowMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:    []string{"Authorization", "Content-Type", "X-Requested-With", "Access-Control-Allow-Origin"},
+		AllowMethods:    []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 	}))
 
 	t.initApi(router)
@@ -40,6 +39,7 @@ func (t *Transport) Init(cfg *config.Config) {
 func (t *Transport) initApi(router *gin.Engine) {
 	api := router.Group("/api")
 	{
+		api.OPTIONS("", func(ctx *gin.Context) { ctx.Status(http.StatusOK) })
 		authApi := api.Group("", t.setUserId)
 
 		notebook := authApi.Group("/notebook")
@@ -56,6 +56,7 @@ func (t *Transport) initApi(router *gin.Engine) {
 			note.GET("/notebook/:notebookId", t.noteGetAllFromNotebook)
 			note.GET("/bookmarks", t.noteGetAllBookmarks)
 			note.GET("/:id", t.noteGetById)
+			note.DELETE("/:id", t.noteDeleteById)
 		}
 
 		user := api.Group("/user")

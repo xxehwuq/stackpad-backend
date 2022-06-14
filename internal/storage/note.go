@@ -11,6 +11,7 @@ type NoteStorage interface {
 	GetAllFromNotebook(notebookId, userId string) ([]entity.Note, error)
 	GetAllBookmarks(userId string) ([]entity.Note, error)
 	GetById(noteId, userId string) (entity.Note, error)
+	DeleteById(note entity.Note) error
 }
 
 type noteStorage struct {
@@ -72,4 +73,13 @@ func (s *noteStorage) GetById(noteId, userId string) (entity.Note, error) {
 	}
 
 	return note, nil
+}
+
+func (s *noteStorage) DeleteById(note entity.Note) error {
+	result := s.db.Delete(&note)
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
 }
