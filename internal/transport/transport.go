@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/thinkerou/favicon"
 	"github.com/yaroslavyarosh/stackpad-backend/config"
 	"github.com/yaroslavyarosh/stackpad-backend/internal/entity"
 	"github.com/yaroslavyarosh/stackpad-backend/internal/service"
@@ -25,6 +26,7 @@ func New(service *service.Service, pkg entity.Pkg) *Transport {
 func (t *Transport) Init(cfg *config.Config) {
 	router := gin.New()
 	router.Use(CORSMiddleware())
+	router.Use(favicon.New("./favicon.ico"))
 	// router.Use(cors.Default())
 
 	router.SetTrustedProxies([]string{"http://192.168.88.252:3000", "http://192.168.88.45:3000", "https://stackpad.herokuapp.com/"})
