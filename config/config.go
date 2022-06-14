@@ -8,7 +8,7 @@ import (
 
 type Config struct {
 	Http struct {
-		Port int `mapstructure:"PORT"`
+		Port string `mapstructure:"PORT"`
 	}
 
 	Db struct {
@@ -16,7 +16,7 @@ type Config struct {
 		Username string `mapstructure:"DB_USERNAME"`
 		Password string `mapstructure:"DB_PASSWORD"`
 		Host     string `mapstructure:"DB_HOST"`
-		Port     int    `mapstructure:"DB_PORT"`
+		Port     string `mapstructure:"DB_PORT"`
 	}
 
 	Hash struct {
@@ -67,7 +67,7 @@ func readEnv(cfg *Config) error {
 		return err
 	}
 
-	if err := viper.Unmarshal(&cfg.Http.Port); err != nil {
+	if err := viper.Unmarshal(&cfg.Http); err != nil {
 		return err
 	}
 	if err := viper.Unmarshal(&cfg.Db); err != nil {

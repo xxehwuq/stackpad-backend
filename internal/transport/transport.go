@@ -1,7 +1,6 @@
 package transport
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -35,7 +34,8 @@ func (t *Transport) Init(cfg *config.Config) {
 	})
 	t.initApi(router)
 
-	log.Fatal(router.Run(fmt.Sprintf(":%d", cfg.Http.Port)))
+	log.Fatal(router.Run(":" + cfg.Http.Port))
+	// log.Fatal(router.Run(fmt.Sprintf(":%d", cfg.Http.Port)))
 }
 
 func (t *Transport) initApi(router *gin.Engine) {
