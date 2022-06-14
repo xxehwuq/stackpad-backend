@@ -16,7 +16,7 @@ type Config struct {
 		Username string `mapstructure:"DB_USERNAME"`
 		Password string `mapstructure:"DB_PASSWORD"`
 		Host     string `mapstructure:"DB_HOST"`
-		Port     string `mapstructure:"DB_PORT"`
+		Port     int    `mapstructure:"DB_PORT"`
 	}
 
 	Hash struct {
