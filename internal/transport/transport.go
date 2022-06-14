@@ -24,17 +24,17 @@ func New(service *service.Service, pkg entity.Pkg) *Transport {
 }
 
 func (t *Transport) Init(cfg *config.Config) {
-	router := gin.New()
-	router.SetTrustedProxies([]string{"http://192.168.88.252:3000", "http://192.168.88.45:3000", "https://stackpad.herokuapp.com/"})
+	router := gin.Default()
+	// router.SetTrustedProxies([]string{"http://192.168.88.252:3000", "http://192.168.88.45:3000", "https://stackpad.herokuapp.com/"})
 
 	router.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, c.ClientIP())
 	})
 
+	t.initApi(router)
+
 	router.Use(cors.Default())
 	// router.Use(CORSMiddleware())
-
-	t.initApi(router)
 
 	log.Fatal(router.Run(":" + cfg.Http.Port))
 }
