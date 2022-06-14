@@ -8,7 +8,7 @@ import (
 
 type Config struct {
 	Http struct {
-		Port string `mapstructure:"port"`
+		Port string `mapstructure:"PORT"`
 	}
 
 	Db struct {
@@ -67,6 +67,9 @@ func readEnv(cfg *Config) error {
 		return err
 	}
 
+	if err := viper.Unmarshal(&cfg.Http.Port); err != nil {
+		return err
+	}
 	if err := viper.Unmarshal(&cfg.Db); err != nil {
 		return err
 	}
