@@ -1,8 +1,8 @@
 package transport
 
 import (
+	"fmt"
 	"log"
-	"net/http"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -24,7 +24,17 @@ func New(service *service.Service, pkg entity.Pkg) *Transport {
 }
 
 func (t *Transport) Init(cfg *config.Config) {
-	router := gin.New()
+	router := gin.Default()
+	router.SetTrustedProxies([]string{"localhost:3000"})
+
+	router.GET("/", func(c *gin.Context) {
+		// If the client is 192.168.1.2, use the X-Forwarded-For
+		// header to deduce the original client IP from the trust-
+		// worthy parts of that header.
+		// Otherwise, simply return the direct client IP
+		fmt.Printf("ClientIP: %s\n", c.ClientIP())
+	})
+
 	// router.Use(cors.New(cors.Config{
 	// 	AllowAllOrigins: true,
 	// 	AllowHeaders:    []string{"Authorization", "Content-Type", "X-Requested-With", "Access-Control-Allow-Origin"},
@@ -33,14 +43,12 @@ func (t *Transport) Init(cfg *config.Config) {
 	router.Use(cors.Default())
 
 	t.initApi(router)
-
 	log.Fatal(router.Run(":" + cfg.Http.Port))
 }
 
 func (t *Transport) initApi(router *gin.Engine) {
 	api := router.Group("/api")
 	{
-		api.OPTIONS("", func(ctx *gin.Context) { ctx.Status(http.StatusOK) })
 		authApi := api.Group("", t.setUserId)
 
 		notebook := authApi.Group("/notebook")
