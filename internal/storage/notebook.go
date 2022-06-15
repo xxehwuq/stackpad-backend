@@ -9,6 +9,7 @@ type NotebookStorage interface {
 	Add(notebook entity.Notebook) error
 	GetAll(userId string) ([]entity.Notebook, error)
 	GetById(notebookId, userId string) (entity.Notebook, error)
+	DeleteById(notebook entity.Notebook) error
 }
 
 type notebookStorage struct {
@@ -50,4 +51,20 @@ func (s *notebookStorage) GetById(notebookId, userId string) (entity.Notebook, e
 	}
 
 	return notebook, nil
+}
+
+func (s *notebookStorage) DeleteById(notebook entity.Notebook) error {
+	var note entity.Note
+
+	result := s.db.Delete(&note, "notebook_id = ?", notebook.Id)
+	if result.Error != nil {
+		return result.Error
+	}
+
+	result = s.db.Delete(&notebook)
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
 }

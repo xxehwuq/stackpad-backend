@@ -51,3 +51,18 @@ func (t *Transport) notebookGetById(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, notebook)
 }
+
+func (t *Transport) notebookDeleteById(ctx *gin.Context) {
+	var notebook entity.Notebook
+
+	notebook.UserId = t.getUserId(ctx)
+	notebook.Id = ctx.Param("id")
+
+	err := t.service.Notebook.DeleteById(notebook)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	ctx.JSON(http.StatusOK, "")
+}

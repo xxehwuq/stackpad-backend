@@ -10,6 +10,7 @@ type NotebookService interface {
 	Add(notebook entity.Notebook, userId string) (string, error)
 	GetAll(userId string) ([]entity.Notebook, error)
 	GetById(notebookId, userId string) (entity.Notebook, error)
+	DeleteById(notebook entity.Notebook) error
 }
 
 type notebookService struct {
@@ -52,4 +53,13 @@ func (s *notebookService) GetById(notebookId, userId string) (entity.Notebook, e
 	}
 
 	return notebook, nil
+}
+
+func (s *notebookService) DeleteById(notebook entity.Notebook) error {
+	err := s.storage.DeleteById(notebook)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
