@@ -21,7 +21,7 @@ func Run(cfg *config.Config) {
 		log.Fatal("error connecting to database: ", err)
 	}
 
-	// db.AutoMigrate(&entity.User{}, &entity.Notebook{}, &entity.Note{})
+	db.AutoMigrate(&entity.User{}, &entity.Notebook{}, &entity.Note{})
 
 	pkg := entity.Pkg{
 		PasswordManager: hash.NewPasswordManager(cfg.Hash.PasswordSalt),
