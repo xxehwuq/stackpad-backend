@@ -2,7 +2,7 @@ package entity
 
 type Note struct {
 	Id           string   `json:"id" gorm:"primaryKey"`
-	Title        string   `json:"title" gorm:"default:New Note"`
+	Title        string   `json:"title" gorm:"default:Нова нотатка"`
 	Text         string   `json:"text"`
 	IsBookmarked bool     `json:"is_bookmarked" gorm:"default:false"`
 	NotebookId   string   `json:"notebook_id"`
