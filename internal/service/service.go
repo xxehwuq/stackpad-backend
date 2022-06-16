@@ -13,7 +13,7 @@ type Service struct {
 
 func New(storage *storage.Storage, pkg entity.Pkg) *Service {
 	return &Service{
-		User:     newUserService(storage.User, pkg.PasswordManager, pkg.JwtManager),
+		User:     newUserService(storage.User, pkg.PasswordManager, pkg.JwtManager, pkg.MailManager),
 		Notebook: newNotebookService(storage.Notebook),
 		Note:     newNoteService(storage.Note),
 	}

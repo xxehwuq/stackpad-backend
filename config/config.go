@@ -27,6 +27,13 @@ type Config struct {
 		Ttl        time.Duration `mapstructure:"ttl"`
 		SigningKey string        `mapstructure:"JWT_SIGNING_KEY"`
 	}
+
+	Smtp struct {
+		From     string `mapstructure:"SMTP_FROM"`
+		Password string `mapstructure:"SMTP_PASSWORD"`
+		Host     string `mapstructure:"SMTP_HOST"`
+		Port     string `mapstructure:"SMTP_PORT"`
+	}
 }
 
 func Init() (*Config, error) {
@@ -74,6 +81,9 @@ func readEnv(cfg *Config) error {
 		return err
 	}
 	if err := viper.Unmarshal(&cfg.Jwt); err != nil {
+		return err
+	}
+	if err := viper.Unmarshal(&cfg.Smtp); err != nil {
 		return err
 	}
 

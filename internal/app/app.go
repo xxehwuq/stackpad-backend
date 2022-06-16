@@ -11,6 +11,7 @@ import (
 	"github.com/yaroslavyarosh/stackpad-backend/internal/transport"
 	"github.com/yaroslavyarosh/stackpad-backend/pkg/hash"
 	"github.com/yaroslavyarosh/stackpad-backend/pkg/jwt"
+	"github.com/yaroslavyarosh/stackpad-backend/pkg/mail"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -26,6 +27,7 @@ func Run(cfg *config.Config) {
 	pkg := entity.Pkg{
 		PasswordManager: hash.NewPasswordManager(cfg.Hash.PasswordSalt),
 		JwtManager:      jwt.NewJwtManager(cfg.Jwt.Ttl, cfg.Jwt.SigningKey),
+		MailManager:     mail.NewMailManager(cfg.Smtp.From, cfg.Smtp.Password, cfg.Smtp.Host, cfg.Smtp.Port),
 	}
 	storage := storage.New(db)
 	service := service.New(storage, pkg)

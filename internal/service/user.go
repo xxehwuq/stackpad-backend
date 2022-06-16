@@ -6,6 +6,7 @@ import (
 	"github.com/yaroslavyarosh/stackpad-backend/internal/storage"
 	"github.com/yaroslavyarosh/stackpad-backend/pkg/hash"
 	"github.com/yaroslavyarosh/stackpad-backend/pkg/jwt"
+	"github.com/yaroslavyarosh/stackpad-backend/pkg/mail"
 )
 
 type UserService interface {
@@ -18,13 +19,15 @@ type userService struct {
 	storage         storage.UserStorage
 	passwordManager hash.PasswordManager
 	jwtManager      jwt.JwtManager
+	mailManager     mail.MailManager
 }
 
-func newUserService(storage storage.UserStorage, passwordManager hash.PasswordManager, jwtManager jwt.JwtManager) *userService {
+func newUserService(storage storage.UserStorage, passwordManager hash.PasswordManager, jwtManager jwt.JwtManager, mailManager mail.MailManager) *userService {
 	return &userService{
 		storage:         storage,
 		passwordManager: passwordManager,
 		jwtManager:      jwtManager,
+		mailManager:     mailManager,
 	}
 }
 
@@ -39,6 +42,8 @@ func (s *userService) SignUp(user entity.User) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
+	s.mailManager.SendUserConfirmation([]string{user.Email}, user.Name)
 
 	token, err := s.jwtManager.GenerateToken(id)
 	if err != nil {
