@@ -8,6 +8,7 @@ import (
 type NoteStorage interface {
 	Add(note entity.Note) error
 	Update(note entity.Note) error
+	GetAll(userId string) ([]entity.Note, error)
 	GetAllFromNotebook(notebookId, userId string) ([]entity.Note, error)
 	GetAllBookmarks(userId string) ([]entity.Note, error)
 	GetById(noteId, userId string) (entity.Note, error)
@@ -40,6 +41,17 @@ func (s *noteStorage) Update(note entity.Note) error {
 	}
 
 	return nil
+}
+
+func (s *noteStorage) GetAll(userId string) ([]entity.Note, error) {
+	var notes []entity.Note
+
+	result := s.db.Where("user_id = ?", userId).Find(&notes)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return notes, nil
 }
 
 func (s *noteStorage) GetAllFromNotebook(notebookId, userId string) ([]entity.Note, error) {
