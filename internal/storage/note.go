@@ -1,6 +1,8 @@
 package storage
 
 import (
+	"errors"
+
 	"github.com/yaroslavyarosh/stackpad-backend/internal/entity"
 	"gorm.io/gorm"
 )
@@ -81,7 +83,7 @@ func (s *noteStorage) GetById(noteId, userId string) (entity.Note, error) {
 
 	result := s.db.Take(&note, "id = ? AND user_id = ?", noteId, userId)
 	if result.Error != nil {
-		return entity.Note{}, result.Error
+		return entity.Note{}, errors.New("нотатку не знайдено")
 	}
 
 	return note, nil

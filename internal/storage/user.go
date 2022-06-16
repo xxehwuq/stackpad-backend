@@ -1,6 +1,8 @@
 package storage
 
 import (
+	"errors"
+
 	"github.com/yaroslavyarosh/stackpad-backend/internal/entity"
 	"gorm.io/gorm"
 )
@@ -24,7 +26,7 @@ func newUserStorage(db *gorm.DB) *userStorage {
 func (s *userStorage) Add(user entity.User) error {
 	result := s.db.Create(&user)
 	if result.Error != nil {
-		return result.Error
+		return errors.New("користувач вже зареєстрований")
 	}
 
 	return nil
@@ -35,7 +37,7 @@ func (s *userStorage) GetByCredentials(email, password string) (entity.User, err
 
 	result := s.db.Take(&user, "email = ? AND password = ?", email, password)
 	if result.Error != nil {
-		return entity.User{}, result.Error
+		return entity.User{}, errors.New("користувача не знайдено")
 	}
 
 	return user, nil
